@@ -25,7 +25,6 @@ namespace COMP123_S2019_FinalTestB.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-
         private void NextButton_Click(object sender, EventArgs e)
         {
             if (MainTabControl.SelectedIndex < MainTabControl.TabPages.Count - 1)
@@ -46,19 +45,20 @@ namespace COMP123_S2019_FinalTestB.Views
             }
         }
 
-      
+        //string arrary for firstname, lastname,inventory list
         string[] FirstNameList;
         string[] LastNameList;
         string[] InventoryList;
         
        
-
+        //LoadName Function
         public void LoadNames()
         {
             FirstNameList = File.ReadAllLines(@"firstNames.txt", Encoding.UTF8);
             LastNameList = File.ReadAllLines(@"lastNames.txt", Encoding.UTF8);
 
         }
+        //Generate Name Function
         public void GenerateName()
         {
             Random rFirstName = new Random();
@@ -124,6 +124,7 @@ namespace COMP123_S2019_FinalTestB.Views
         {
             InventoryList = File.ReadAllLines(@"inventory.txt", Encoding.UTF8);
         }
+        //GenerateRandomInventory Function
         public void GenerateRandomInventory()
         {
             Random i1 = new Random();
