@@ -49,6 +49,7 @@ namespace COMP123_S2019_FinalTestB.Views
       
         string[] FirstNameList;
         string[] LastNameList;
+        string[] InventoryList;
         
        
 
@@ -78,6 +79,7 @@ namespace COMP123_S2019_FinalTestB.Views
         {
             LoadNames();
             GenerateName();
+            LoadInventory();
         }
         /// <summary>
         /// This is an event handler for GenerateNameButton Click
@@ -116,8 +118,125 @@ namespace COMP123_S2019_FinalTestB.Views
             int n6 = number.Next(3, 18);
             CharismaDataLabel.Text = n.ToString();
 
+        }
+        //Load Inventory Function
+        public void LoadInventory()
+        {
+            InventoryList = File.ReadAllLines(@"inventory.txt", Encoding.UTF8);
+        }
+        public void GenerateRandomInventory()
+        {
+            Random i1 = new Random();
+            int n1 = i1.Next(InventoryList.Length);
+            string inventory1= InventoryList[n1];
+            InventoryList
+            Program.items.Description = InventoryList[n1];
+            Random i2= new Random();
+            int n2 = i2.Next(FirstNameList.Length);
+            Program.items.Description = InventoryList[n2];
+
+        }
+        /// <summary>
+        /// this is an event hanlder for saveButton click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // configure the file dialog
+            CharacterSaveFileDialog.FileName = "Character.txt";
+            CharacterSaveFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
+
+            CharacterSaveFileDialog.Filter = "Text Files (*.txt)|*.txt| All Files (*.*)|*.*";
 
 
+
+            // open file dialog - Modal Form
+
+            var result = CharacterSaveFileDialog.ShowDialog();
+            if (result != DialogResult.Cancel)
+            {
+                // open file to write
+                using (StreamWriter outputStream = new StreamWriter(
+                    File.Open(CharacterSaveFileDialog.FileName, FileMode.Create)))
+                {
+                    // write stuff to the file
+
+                    outputStream.WriteLine(Program.characters.Firstname);
+                    outputStream.WriteLine(Program.characters.Lastname);
+                    outputStream.WriteLine(Program.characters.Strength);
+                    outputStream.WriteLine(Program.characters.Dexterity);
+                    outputStream.WriteLine(Program.characters.Constitution);
+                    outputStream.WriteLine(Program.items);
+                    // close the file
+                    outputStream.Close();
+                    // dispose of the memory
+                    outputStream.Dispose();
+
+                }
+
+                MessageBox.Show("File Saved", "Saving...",MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+        /// <summary>
+        /// Thie is event handler openFile click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // configure the file dialog
+            CharacterSaveFileDialog.FileName = "Character.txt";
+            CharacterSaveFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
+
+            CharacterSaveFileDialog.Filter = "Text Files (*.txt)|*.txt| All Files (*.*)|*.*";
+
+
+
+            // open file dialog - Modal Form
+
+            var result = CharacterOpenFileDialog.ShowDialog();
+            if (result != DialogResult.Cancel)
+            {
+                try
+                {
+                    // open file to write
+                    using (StreamReader inputStream = new StreamReader(
+                        File.Open(CharacterOpenFileDialog.FileName, FileMode.Create)))
+                    {
+                        // write stuff to the file
+
+                        Program.characters.Firstname = inputStream.ReadLine();
+                        Program.characters.Lastname = inputStream.ReadLine();
+                        Program.characters.Strength = inputStream.ReadLine();
+                        Program.characters.Dexterity = inputStream.ReadLine();
+                        Program.characters.Constitution = inputStream.ReadLine();
+                        Program.items = inputStream.ReadLine();
+                        // close the file
+                        inputStream.Close();
+                        // dispose of the memory
+                        inputStream.Dispose();
+
+                    }
+
+                }
+                catch (IOException exception)
+
+                {
+
+                    MessageBox.Show("Error: " + exception.Message, "File I/O Error",
+
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                }
+
+            }
         }
     }
 }
